@@ -7,11 +7,14 @@
 
 import SwiftUI
 
-struct ContentView: View {
+
+struct SignInView: View {
     
     @State var email = ""
-    @State var pass = ""
-    @State var log = ""
+    @State var password = ""
+    @ObservedObject var user = User()
+    @Binding var page: Int
+    
     var body: some View {
         
         ZStack{// главный стек в нем будут храниться другие стеки
@@ -26,16 +29,16 @@ struct ContentView: View {
 
                 //выравнивание текста емаил и пароль по левому краю
                 VStack(alignment: .leading) {
-            }
+            
                     Text("EMAIL")
                         .font(
                         .custom("Areal", size: 15))//изменение шрифта и его размер
                         .foregroundColor(.black)
                         .padding(.trailing, 5)
                 
-                HStack{
-                    Image(systemName: "envelope")
-                        .padding(.leading)
+//                HStack{
+//                    Image(systemName: "envelope")
+//                        .padding(.leading)
                     
                         TextField("name@email.com", text: $email)//делаем рамочку для ввода текста
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -51,7 +54,7 @@ struct ContentView: View {
                    
 
                 VStack{
-                TextField("********", text: $pass)//делаем рамочку для ввода текста
+                TextField("********", text: $password)//делаем рамочку для ввода текста
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal,5)
                  
@@ -59,11 +62,13 @@ struct ContentView: View {
 
                    
                     Button(action: {
-                    email = email
+                        user.login(email: email, password: password)
+                            page = 2
+                        
                     //pass=passs
                         
                     },label: {
-                    Text("SIGN UP")
+                    Text("SIGN IP")
                         .foregroundColor(.white)
                         .frame(width: 380, height: 50, alignment: .center)
                         .background(Color.blue)
@@ -72,7 +77,7 @@ struct ContentView: View {
                     .padding(.vertical,50)
                 }
                     Button(action: {
-                        log=log
+                       // log=log
                     }, label: {
                     Text("Login")
                     .foregroundColor(.blue)
@@ -85,13 +90,14 @@ struct ContentView: View {
                 }
             }
         }
-    }
+    
 
  struct ContentView_Previews: PreviewProvider {
                     static var previews: some View {
-                        ContentView()
+                        SignInView(page: .constant(1))
             }
     
  }
                     
                
+}
